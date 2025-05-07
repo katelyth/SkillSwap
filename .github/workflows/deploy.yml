@@ -18,10 +18,20 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Install dependencies
+      - name: Install client dependencies
+        working-directory: ./client
         run: npm install
 
-      - name: Build React app
+      - name: Build Client
+        working-directory: ./client
+        run: npm run build
+
+      - name: Install server dependencies
+        working-directory: ./server
+        run: npm install
+
+      - name: Start server
+        working-directory: ./server
         run: npm run build
 
       - name: Deploy to EC2
