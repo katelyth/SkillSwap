@@ -1,0 +1,23 @@
+/* Style for the navbar container */
+.nav {
+    background-color: #333; /* Set background color */
+    padding: 10px; /* Add padding around the navbar */
+    display: flex; /* Flexbox layout for horizontal alignment */
+    justify-content: space-between; /* Space out the items */
+    align-items: center; /* Vertically center the items */
+}
+
+/* Style for individual links in the navbar */
+.navlink {
+color: white; /* Text color */
+text-decoration: none; /* Remove underline */
+padding: 8px 15px; /* Add padding around the link */
+font-size: 16px; /* Set font size */
+transition: background-color 0.3s ease; /* Add transition effect */
+}
+
+/* Style for hover effect on links */
+.navlink:hover {
+background-color: #555; /* Change background on hover */
+border-radius: 5px; /* Add rounded corners */
+}
