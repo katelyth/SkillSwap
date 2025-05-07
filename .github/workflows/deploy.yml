@@ -51,7 +51,7 @@ jobs:
 
       # SSH into EC2 and start the server
       - name: SSH into EC2 and start the server
-        uses: appleboy/ssh-action@v0.1.4
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
