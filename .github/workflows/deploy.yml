@@ -39,6 +39,15 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}  # Base64-encoded SSH private key
           source: "./client/build/*, ./server/*"  # Ensure client build and server files are copied
           target: "/home/ubuntu/your-app"  # Target directory on EC2
+      
+      - name: Set up SSH key for deployment
+        run: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            eval $(ssh-agent -s)
+            ssh-add ~/.ssh/id_rsa
+
 
       # SSH into EC2 and start the server
       - name: SSH into EC2 and start the server
