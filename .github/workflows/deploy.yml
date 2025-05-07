@@ -30,9 +30,9 @@ jobs:
         working-directory: ./server
         run: npm install
 
-      - name: Start server
+      - name: Start Server
         working-directory: ./server
-        run: npm run build
+        run: npm start
 
       - name: Deploy to EC2
         uses: appleboy/scp-action@master
