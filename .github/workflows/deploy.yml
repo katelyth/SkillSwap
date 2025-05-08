@@ -16,20 +16,67 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
-      - name: Install dependencies
+      - name: Install client dependencies
+        working-directory: ./client
         run: npm install
 
-      - name: Build React app
-        run: npm run build
+      - name: Build Client
+        working-directory: ./client
+        run: npm run build  # Build production-ready client files
 
+      - name: Check Client Build Output
+        working-directory: ./client
+        run: |
+          echo "Listing files in client/dist"
+          ls -la client/dist
+          
+      - name: Install server dependencies
+        working-directory: ./server
+        run: npm install
+
+      # Set up SSH key for deployment
+      - name: Set up SSH key for deployment
+        run: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            eval $(ssh-agent -s)
+            ssh-add ~/.ssh/id_rsa
+
+      - name: Debug Check if client/dist and server exist
+        run: |
+          echo "Workspace root:"
+          ls -la
+          echo ""
+          echo "Client build directory:"
+          ls -la client/dist || echo "client/dist not found"
+          echo ""
+          echo "Server directory:"
+          ls -la server || echo "server not found"
+
+
+      # Deploy files to EC2 (both client build and server)
       - name: Deploy to EC2
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.ec2-18-217-2-172.us-east-2.compute.amazonaws.com }}
+          host: ${{ secrets.EC2_HOST }}  # EC2 host IP or DNS
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}  # Base64-encoded SSH private key
+          source: "client/dist/* server/*"  # Ensure client build and server files are copied
+          target: "/home/ubuntu/your-app"  # Target directory on EC2
+
+      # SSH into EC2 and start the server
+      - name: SSH into EC2 and start the server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "build/*"
-          target: "/var/www/html/"
-
+          script: |
+            cd /home/ubuntu/your-app/server
+            npm install  # Install server dependencies on EC2 if needed
+            pm2 restart server || pm2 start server.js --name "server"  # Restart server with PM2 (or start if it's not running)
+            cd /home/ubuntu/your-app/client
+            npm run build  # Ensure client build is deployed and ready on EC2
