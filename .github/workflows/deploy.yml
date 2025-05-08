@@ -39,6 +39,20 @@ jobs:
             eval $(ssh-agent -s)
             ssh-add ~/.ssh/id_rsa
 
+      - name: Debug Check if client/build and server exist
+        run: |
+          echo "Workspace root:"
+          ls -la
+          echo ""
+          echo "Client directory:"
+          ls -la client || echo "client not found"
+          echo ""
+          echo "Client build directory:"
+          ls -la client/build || echo "client/build not found"
+          echo ""
+          echo "Server directory:"
+          ls -la server || echo "server not found"
+
       # Deploy files to EC2 (both client build and server)
       - name: Deploy to EC2
         uses: appleboy/scp-action@master
