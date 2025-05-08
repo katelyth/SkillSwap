@@ -48,7 +48,7 @@ jobs:
           ls -la client || echo "client not found"
           echo ""
           echo "Client build directory:"
-          ls -la client/build || echo "client/build not found"
+          ls -la client/dist || echo "client/dist not found"
           echo ""
           echo "Server directory:"
           ls -la server || echo "server not found"
@@ -60,7 +60,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}  # EC2 host IP or DNS
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}  # Base64-encoded SSH private key
-          source: "client/build server"  # Ensure client build and server files are copied
+          source: "client/dist server"  # Ensure client build and server files are copied
           target: "/home/ubuntu/your-app"  # Target directory on EC2
 
       # SSH into EC2 and start the server
