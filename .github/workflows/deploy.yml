@@ -46,7 +46,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}  # EC2 host IP or DNS
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}  # Base64-encoded SSH private key
-          source: "./client/build/*, ./server/*"  # Ensure client build and server files are copied
+          source: "client/build server"  # Ensure client build and server files are copied
           target: "/home/ubuntu/your-app"  # Target directory on EC2
 
       # SSH into EC2 and start the server
