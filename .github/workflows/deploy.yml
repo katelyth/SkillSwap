@@ -22,15 +22,28 @@ jobs:
         working-directory: ./client
         run: npm install
 
+      - name: List client directory contents before build
+        working-directory: ./client
+        run: ls -la
+  
       - name: Build Client
         working-directory: ./client
-        run: npm run build  # Build production-ready client files
+        run: |
+          echo "Running Vite build..."
+          npm run build --debug
+          echo "Listing client directory contents after build:"
+          ls -la client
+          echo "Listing client/dist directory:"
+          ls -la client/dist || echo "client/dist does not exist"
 
       - name: Check Client Build Output
         working-directory: ./client
         run: |
-          echo "Listing files in client/dist"
-          ls -la client/dist
+          if [ -d "client/dist" ]; then
+            echo "client/dist exists"
+          else
+            echo "client/dist does not exist"
+          fi
           
       - name: Install server dependencies
         working-directory: ./server
