@@ -91,7 +91,5 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/your-app/server
-            npm install  # Install server dependencies on EC2 if needed
-            pm2 restart server || pm2 start server.js --name "server"  # Restart server with PM2 (or start if it's not running)
-            cd /home/ubuntu/your-app/client
-            npm run build  # Ensure client build is deployed and ready on EC2
+            npm install
+            pm2 restart server || pm2 start server.js --name "server"
